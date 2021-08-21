@@ -61,7 +61,7 @@ You can also run the GPU image using [nvidia-docker](https://github.com/NVIDIA/n
 
 ### Running the code
 
-The example_unsupervised.sh and example_supervised.sh files contain example usages of the code, which use the unsupervised and supervised variants of GraphSage, respectively.
+The `example_unsupervised.sh` and `example_supervised.sh` files contain example usages of the code, which use the unsupervised and supervised variants of GraphSage, respectively.
 
 If your benchmark/task does not require generalizing to unseen data, we recommend you try setting the "--identity_dim" flag to a value in the range [64,256].
 This flag will make the model embed unique node ids as attributes, which will increase the runtime and number of parameters but also potentially increase the performance.
