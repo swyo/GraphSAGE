@@ -69,11 +69,8 @@ class SupervisedGraphsage(models.SampleAndAggregate):
         self.batch_size = placeholders["batch_size"]
         self.placeholders = placeholders
         self.layer_infos = layer_infos
-
         self.optimizer = tf.train.AdamOptimizer(learning_rate=FLAGS.learning_rate)
-
         self.build()
-
 
     def build(self):
         samples1, support_sizes1 = self.sample(self.inputs1, self.layer_infos)

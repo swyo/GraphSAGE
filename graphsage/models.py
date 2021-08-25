@@ -305,11 +305,11 @@ class SampleAndAggregate(GeneralizedModel):
                 dim_mult = 2 if concat and (layer != 0) else 1
                 # aggregator at current layer
                 if layer == len(num_samples) - 1:
-                    aggregator = self.aggregator_cls(dim_mult*dims[layer], dims[layer+1], act=lambda x : x,
+                    aggregator = self.aggregator_cls(dim_mult * dims[layer], dims[layer + 1], act=lambda x : x,
                             dropout=self.placeholders['dropout'], 
                             name=name, concat=concat, model_size=model_size)
                 else:
-                    aggregator = self.aggregator_cls(dim_mult*dims[layer], dims[layer+1],
+                    aggregator = self.aggregator_cls(dim_mult * dims[layer], dims[layer + 1],
                             dropout=self.placeholders['dropout'], 
                             name=name, concat=concat, model_size=model_size)
                 aggregators.append(aggregator)
@@ -322,9 +322,8 @@ class SampleAndAggregate(GeneralizedModel):
                 dim_mult = 2 if concat and (layer != 0) else 1
                 neigh_dims = [batch_size * support_sizes[hop], 
                               num_samples[len(num_samples) - hop - 1], 
-                              dim_mult*dims[layer]]
-                h = aggregator((hidden[hop],
-                                tf.reshape(hidden[hop + 1], neigh_dims)))
+                              dim_mult * dims[layer]]
+                h = aggregator((hidden[hop], tf.reshape(hidden[hop + 1], neigh_dims)))
                 next_hidden.append(h)
             hidden = next_hidden
         return hidden[0], aggregators

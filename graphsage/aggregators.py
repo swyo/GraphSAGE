@@ -43,8 +43,8 @@ class MeanAggregator(Layer):
     def _call(self, inputs):
         self_vecs, neigh_vecs = inputs
 
-        neigh_vecs = tf.nn.dropout(neigh_vecs, 1-self.dropout)
-        self_vecs = tf.nn.dropout(self_vecs, 1-self.dropout)
+        neigh_vecs = tf.nn.dropout(neigh_vecs, 1 - self.dropout)
+        self_vecs = tf.nn.dropout(self_vecs, 1 - self.dropout)
         neigh_means = tf.reduce_mean(neigh_vecs, axis=1)
        
         # [nodes] x [out_dim]
