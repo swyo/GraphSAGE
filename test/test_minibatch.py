@@ -31,14 +31,14 @@ class TestMinibatch(unittest.TestCase):
             batch_size=batch_size, max_degree=max_degree, context_pairs=context_pairs
         ), features
 
-    # @unittest.skip("Skip Init")
+    @unittest.skip("Skip Init")
     def test01_init(self):
         minibatch, _ = self._generate_minibatch()
         self.assertIsInstance(
             minibatch, NodeMinibatchIterator, 'The class of minibatch is not accord with NodeMinibatchIterator'
         )
     
-    # @unittest.skip("Skip Iteration")
+    @unittest.skip("Skip Iteration")
     def test02_iteration(self):
         minibatch, _ = self._generate_minibatch()
         try:
@@ -53,7 +53,7 @@ class TestMinibatch(unittest.TestCase):
         except Exception:
             self.assertTrue(False, 'Iterate an epoch does not finished')
 
-    def test03_sample(self):
+    def test03_sample_and_mean_aggreate(self):
         minibatch, features = self._generate_minibatch()
         adj_info_ph = tf.placeholder(tf.int32, shape=minibatch.adj.shape)
         adj_info = tf.Variable(adj_info_ph, trainable=False, name="adj_info")
@@ -67,7 +67,8 @@ class TestMinibatch(unittest.TestCase):
             minibatch.num_classes, minibatch.placeholders, features,
             adj_info, minibatch.deg, layer_infos, 
             model_size='small', sigmoid_loss=True,
-            identity_dim=0, logging=True)
+            identity_dim=0, logging=True
+        )
         samples_once = sampler((minibatch.placeholders['batch'], layer_infos[0].num_samples))
         samples_all_hops, support_sizes = model.sample(minibatch.placeholders['batch'], layer_infos)
         num_samples = [layer_info.num_samples for layer_info in layer_infos]
@@ -91,3 +92,7 @@ class TestMinibatch(unittest.TestCase):
                 self.assertEqual(len(_samples_in_hop), support_sizes[i] * minibatch.batch_size)
                 if i == 0:
                     self.assertTrue(np.array_equal(np.array(_samples_in_hop), batch))
+            # check for mean aggregate
+            outputs = sess.run(model.outputs1, feed_dict=feed_dict)
+            self.assertEqual(outputs.shape, (minibatch.batch_size, dim * 2))
+            sess.close()
