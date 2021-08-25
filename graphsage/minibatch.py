@@ -225,7 +225,12 @@ class NodeMinibatchIterator(object):
         return label_vec
 
     def construct_adj(self):
-        adj = len(self.id2idx)*np.ones((len(self.id2idx)+1, self.max_degree))
+        """Constructs an indexed adjacency list for train nodes and edges.
+        It also limits the edges to the maximum degree if there are too many edges,
+        otherwise pad edges to the maximum degree by sampling with replacement.
+        Note that adjacency list becomes same number of neigbors for all nodes.
+        """
+        adj = len(self.id2idx) * np.ones((len(self.id2idx) + 1, self.max_degree))
         deg = np.zeros((len(self.id2idx),))
 
         for nodeid in self.G.nodes():
@@ -245,7 +250,8 @@ class NodeMinibatchIterator(object):
         return adj, deg
 
     def construct_test_adj(self):
-        adj = len(self.id2idx)*np.ones((len(self.id2idx)+1, self.max_degree))
+        """Constructs an indexed adjacency list for all nodes and edges."""
+        adj = len(self.id2idx) * np.ones((len(self.id2idx) + 1, self.max_degree))
         for nodeid in self.G.nodes():
             neighbors = np.array([self.id2idx[neighbor] 
                 for neighbor in self.G.neighbors(nodeid)])
